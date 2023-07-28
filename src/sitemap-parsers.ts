@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { formatConnectionMessage, newLogger, logger } from './logger.js';
+import { formatConnectionMessage, newLogger, logger } from './logger';
 import chalk from 'chalk';
 
 let totalNumberOfLinks = 0;
