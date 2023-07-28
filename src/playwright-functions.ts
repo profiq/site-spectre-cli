@@ -5,6 +5,18 @@ import chalk from 'chalk';
 import { totalNumberOfLinks } from './sitemap-parsers.js';
 
 
+// const waitForLoadStateConfig: {
+//   "document": {
+//     waitForLoadState: "domcontentloaded"
+//   },
+//   "network": {
+//     waitForLoadState: "networkidle"
+//   }
+// }
+
+
+
+
 /**
  * function logging to console without winston
  * @param links array of links we want to visit

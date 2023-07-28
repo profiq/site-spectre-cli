@@ -1,16 +1,15 @@
 import { XMLParser } from "fast-xml-parser";
-import { logMessage, newLogger, logger } from './logger.js';
+import { formatConnectionMessage, newLogger, logger } from './logger.js';
 import chalk from 'chalk';
 
 let totalNumberOfLinks = 0;
 
 /**
- * reads data from website into string format
+ * Reads data from website into string format
  * @param url url of website we want to read data from
  * @returns site data in string format
  */
-async function readSitemap(url: string){
-
+ const readSitemap = async (url: string): Promise<string> => {
     const response =  await fetch(url)
     const data = await response.text()
 
@@ -18,15 +17,16 @@ async function readSitemap(url: string){
 }
 
 /**
- * parses our xml from string format into an fast-xml-parser object
+ * Parses our xml from string format into an fast-xml-parser object
  * @param url url of website we want to read data from
  * @returns fast-xml-parser object with xml data from website
  */
 async function parseSitemap(url:string){
     const parser = new XMLParser();
     const data = await readSitemap(url);
-    let jObj = await parser.parse(data);
-    return jObj;
+    const parsedSitemapObject = await parser.parse(data);
+
+    return parsedSitemapObject;
 }
 
 /**

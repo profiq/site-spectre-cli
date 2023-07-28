@@ -1,6 +1,7 @@
-import {     linksToArray  } from './sitemap-parsers.js';   
-import { visitSites, visitSitesWinston } from './playwright-functions.js'; 
+import {     linksToArray  } from './sitemap-parsers.js';
+import { visitSites, visitSitesWinston } from './playwright-functions.js';
 import yargs from "yargs";
+import { Interface } from 'readline';
 
 /*
 const argv = yargs
@@ -23,7 +24,7 @@ const argv = yargs
 const name = argv.name as string;
 //@ts-ignore
 const greeting = argv.greeting as string;
-  
+
   console.log(`Hello, ${name}! You are ${greeting} years old.`);
 
   */
@@ -36,6 +37,23 @@ let sites:string[] = [
 
 
 let linksToVisit = [];
+
+
+interface configType {
+  requestTimeout: number,
+  pageLoadType: "document" | "network"
+  customHeaders: Record<string, string>[]
+}
+
+
+
+const config: configType = {
+  pageLoadType: "document",
+  requestTimeout: 30000,
+  // TODO custom playwrigth headers || add to both fetch and playwright
+  // custom headesr --> array
+  customHeaders: []
+}
 
 
 
