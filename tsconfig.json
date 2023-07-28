@@ -2,8 +2,8 @@
   // https://www.typescriptlang.org/tsconfig#compilerOptions
   "compilerOptions": {
     "esModuleInterop": true,
-    // "lib": ["es2020"],
-    "module": "ESNext",
+    "module": "commonjs",
+    "lib": ["es2020", "dom"],
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "strict": true,

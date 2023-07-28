@@ -1,8 +1,8 @@
 import exp from 'constants';
 import { chromium, devices } from 'playwright';
-import { formatConnectionMessage, newLogger, logger } from './logger.js';
+import { formatConnectionMessage, newLogger, logger } from './logger';
 import chalk from 'chalk';
-import { totalNumberOfLinks } from './sitemap-parsers.js';
+import { totalNumberOfLinks } from './sitemap-parsers';
 
 
 // const waitForLoadStateConfig: {

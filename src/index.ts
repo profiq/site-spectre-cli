@@ -1,5 +1,5 @@
-import {     linksToArray  } from './sitemap-parsers.js';
-import { visitSites, visitSitesWinston } from './playwright-functions.js';
+import {     linksToArray  } from './sitemap-parsers';
+import { visitSites, visitSitesWinston } from './playwright-functions';
 import yargs from "yargs";
 import { Interface } from 'readline';
 
@@ -36,8 +36,6 @@ let sites:string[] = [
 ];
 
 
-let linksToVisit = [];
-
 
 interface configType {
   requestTimeout: number,
@@ -56,11 +54,14 @@ const config: configType = {
 }
 
 
+const runMain = async () => {
+  const linksToVisit = await linksToArray( 'https://www.profiq.com/wp-sitemap.xml', sites);
 
-linksToVisit = await linksToArray( 'https://www.profiq.com/wp-sitemap.xml', sites);
+  await visitSitesWinston(linksToVisit);
+}
 
+runMain().then(() => {})
 
-visitSitesWinston(linksToVisit);
 
 
 
