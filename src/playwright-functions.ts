@@ -1,6 +1,6 @@
 import exp from 'constants';
 import { chromium, devices } from 'playwright';
-import { logMessage, newLogger, logger } from './winston-logger.js';
+import { formatConnectionMessage, newLogger, logger } from './logger.js';
 import chalk from 'chalk';
 import { totalNumberOfLinks } from './sitemap-parsers.js';
 
@@ -74,11 +74,11 @@ async function visitSitesWinston(links:string[]){
 
             if(response !== null){
                 if(response.status() === 200  && response.url() !== 'https://www.profiq.com/job/junior-developer/'){
-                    logger.log('info', chalk.green(logMessage(i, links.length, response.status(), elapsed_time, response.url())));
+                    logger.log('info', chalk.green(formatConnectionMessage(i, links.length, response.status(), elapsed_time, response.url())));
                     numOfOK++;
                 }
                 else {
-                    logger.log('error', (logMessage(i, links.length, response.status(), elapsed_time, response.url())));
+                    logger.log('error', (formatConnectionMessage(i, links.length, response.status(), elapsed_time, response.url())));
                     numOfErrors++;
                 }
             }

@@ -50,27 +50,24 @@ function newLogger(){
             format.colorize({message:true, colors: { error: 'red', info: 'white'} }),
             format.simple()
             )
-            
+
         }));
     }
 
-    
-    
+
+
 
     return logger;
 }
 
-function logMessage(i:number, linksLen:number, status:number, elapsed_time:number, url:string){
-        return `${i+1}/${linksLen} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
-
-
-    
+function formatConnectionMessage(counter:number, maxCounter:number, status:number, elapsed_time:number, url:string){
+        return `${counter+1}/${maxCounter} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
 }
 
 const logger = newLogger();
 
 export {
     newLogger,
-    logMessage,
+    formatConnectionMessage,
     logger
 }
