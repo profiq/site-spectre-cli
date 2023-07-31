@@ -1,18 +1,19 @@
 import exp from 'constants';
-import { chromium, devices } from 'playwright';
+import { chromium, devices } from 'playwright-chromium';
 import { formatConnectionMessage, newLogger, logger } from './logger';
 import chalk from 'chalk';
 import { totalNumberOfLinks } from './sitemap-parsers';
+import { configType } from './types';
 
 
-// const waitForLoadStateConfig: {
-//   "document": {
-//     waitForLoadState: "domcontentloaded"
-//   },
-//   "network": {
-//     waitForLoadState: "networkidle"
-//   }
-// }
+const waitForLoadStateConfig = {
+  "document": {
+    waitForLoadState: "domcontentloaded"
+  },
+  "network": {
+    waitForLoadState: "networkidle"
+  }
+}
 
 
 
@@ -60,7 +61,7 @@ async function visitSites(links:string[]){
  * visits all our specified links, each visit reports to log file and console, summarizes successful and failed visits, logs total time
  * @param links array of links we want to visit
  */
-async function visitSitesWinston(links:string[]){
+async function visitSitesWinston(links: string[], config: configType){
     const browser = await chromium.launch();
     const context = await browser.newContext(devices['Desktop Chrome']);
     const page = await context.newPage();
@@ -75,17 +76,21 @@ async function visitSitesWinston(links:string[]){
     for(let i = 0; i< links.length; i++){
         try{
             const stime = performance.now();
-            response = await page.goto(links[i]);
-            /*const popupPromise = page.waitForEvent('popup');
-            await page.getByRole('button').click(); // Click triggers a popup.
-            const popup = await popupPromise;
-            await popup.waitForLoadState('domcontentloaded');*/
-            await page.waitForLoadState('networkidle', {timeout: 30000});
+
+            if(config.customHeaders){
+              await page.setExtraHTTPHeaders(config.customHeaders);
+            }
+            response = await page.goto(links[i], {timeout: config.requestTimeout});
+
+            if(config.utilizeWaitForLoadState){
+              await page.waitForLoadState(waitForLoadStateConfig[config.pageLoadType].waitForLoadState as any, {timeout: config.requestTimeout});
+            }
+
             const ftime = performance.now();
             const elapsed_time = ftime - stime;
 
             if(response !== null){
-                if(response.status() === 200  && response.url() !== 'https://www.profiq.com/job/junior-developer/'){
+                if(response.status() === 200 /* && response.url() !== 'https://www.profiq.com/job/junior-developer/'*/){
                     logger.log('info', chalk.green(formatConnectionMessage(i, links.length, response.status(), elapsed_time, response.url())));
                     numOfOK++;
                 }
@@ -121,6 +126,6 @@ async function visitSitesWinston(links:string[]){
 
 
 export {
-    visitSites,
-    visitSitesWinston
+    visitSitesWinston,
+    configType
 }

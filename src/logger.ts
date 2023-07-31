@@ -4,7 +4,7 @@ import chalk from 'chalk';
 
 
 
-function newLogger(){
+const newLogger= () =>{
 
     const logger = createLogger({
     level: 'info',
@@ -23,8 +23,7 @@ function newLogger(){
         // - Write to all logs with level `info` and below to `quick-start-combined.log`.
         // - Write all logs error (and below) to `quick-start-error.log`.
         //
-        new transports.File({ filename: 'quick-start-error.log', level: 'error', options: { flags: 'w' } }),
-        new transports.File({ filename: 'quick-start-combined.log', options: { flags: 'w' } })
+        new transports.File({ filename: 'logs/combined.log', options: { flags: 'w' } })
     ]
     });
 
@@ -60,7 +59,7 @@ function newLogger(){
     return logger;
 }
 
-function formatConnectionMessage(counter:number, maxCounter:number, status:number, elapsed_time:number, url:string){
+const formatConnectionMessage = (counter:number, maxCounter:number, status:number, elapsed_time:number, url:string): string =>{
         return `${counter+1}/${maxCounter} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
 }
 
