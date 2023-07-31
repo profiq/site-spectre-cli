@@ -1,5 +1,5 @@
-import {     linksToArray  } from './sitemap-parsers';
-import { visitSites, visitSitesWinston } from './playwright-functions';
+import {     linksToArray, readSitemap  } from './sitemap-parsers';
+import { configType, visitSitesWinston } from './link-visit';
 import yargs from "yargs";
 import { Interface } from 'readline';
 
@@ -32,32 +32,30 @@ const greeting = argv.greeting as string;
 let sites:string[] = [
 //'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
 // 'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
- //'https://www.profiq.com/wp-sitemap-posts-job-1.xml'
+'https://www.profiq.com/wp-sitemap-posts-job-1.xml'
 ];
-
-
-
-interface configType {
-  requestTimeout: number,
-  pageLoadType: "document" | "network"
-  customHeaders: Record<string, string>[]
-}
-
 
 
 const config: configType = {
   pageLoadType: "document",
-  requestTimeout: 30000,
+  requestTimeout: 3000,
+  utilizeWaitForLoadState: false,
   // TODO custom playwrigth headers || add to both fetch and playwright
   // custom headesr --> array
-  customHeaders: []
+  customHeaders: {}
 }
 
+const profiq = 'https://www.profiq.com/wp-sitemap.xml';
+const sitetxt = 'https://www.advancedhtml.co.uk/sitemap.txt';
 
 const runMain = async () => {
-  const linksToVisit = await linksToArray( 'https://www.profiq.com/wp-sitemap.xml', sites);
+  const linksToVisit = await linksToArray( sitetxt, sites);
 
-  await visitSitesWinston(linksToVisit);
+  //console.log(linksToVisit);
+
+  await visitSitesWinston(linksToVisit, config);
+  //const tmp = await readSitemap('https://www.advancedhtml.co.uk/sitemap.txt');
+  //console.log(tmp.split(/\n/));
 }
 
 runMain().then(() => {})
