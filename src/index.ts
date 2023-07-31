@@ -1,7 +1,7 @@
-import {     linksToArray, readSitemap  } from './sitemap-parsers';
-import { configType, visitSitesWinston } from './link-visit';
+import { linksToArray, readSitemap } from "./sitemap-parsers";
+import { configType, visitSitesWinston } from "./link-visit";
 import yargs from "yargs";
-import { Interface } from 'readline';
+import { Interface } from "readline";
 
 /*
 const argv = yargs
@@ -29,12 +29,11 @@ const greeting = argv.greeting as string;
 
   */
 
-let sites:string[] = [
-//'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
-// 'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
-'https://www.profiq.com/wp-sitemap-posts-job-1.xml'
+let sites: string[] = [
+  //'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
+  // 'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
+  "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
 ];
-
 
 const config: configType = {
   pageLoadType: "document",
@@ -42,34 +41,20 @@ const config: configType = {
   utilizeWaitForLoadState: false,
   // TODO custom playwrigth headers || add to both fetch and playwright
   // custom headesr --> array
-  customHeaders: {}
-}
+  customHeaders: {},
+};
 
-const profiq = 'https://www.profiq.com/wp-sitemap.xml';
-const sitetxt = 'https://www.advancedhtml.co.uk/sitemap.txt';
+const profiq = "https://www.profiq.com/wp-sitemap.xml";
+const sitetxt = "https://www.advancedhtml.co.uk/sitemap.txt";
 
 const runMain = async () => {
-  const linksToVisit = await linksToArray( sitetxt, sites);
+  const linksToVisit = await linksToArray(sitetxt, sites);
 
   //console.log(linksToVisit);
 
   await visitSitesWinston(linksToVisit, config);
   //const tmp = await readSitemap('https://www.advancedhtml.co.uk/sitemap.txt');
   //console.log(tmp.split(/\n/));
-}
+};
 
-runMain().then(() => {})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+runMain().then(() => {});
