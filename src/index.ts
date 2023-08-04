@@ -30,8 +30,8 @@ const greeting = argv.greeting as string;
   */
 
 let sites: string[] = [
-  'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
-   'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
+  "https://www.profiq.com/wp-sitemap-posts-post-1.xml",
+  "https://www.profiq.com/wp-sitemap-posts-page-1.xml",
   "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
 
   //"https://movingfast.tech/post-sitemap.xml"
@@ -49,7 +49,7 @@ const config: configType = {
 
 const profiq = "https://www.profiq.com/wp-sitemap.xml";
 const sitetxt1 = "https://www.advancedhtml.co.uk/sitemap.txt";
-const sitetxt2 = "https://www.coh3stats.com/sitemap.txt"
+const sitetxt2 = "https://www.coh3stats.com/sitemap.txt";
 
 const runMain = async () => {
   const linksToVisit = await linksToArray(profiq, sites);

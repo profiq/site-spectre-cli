@@ -4,7 +4,7 @@ import { formatConnectionMessage, newLogger, logger } from "./logger";
 import chalk from "chalk";
 import { totalNumberOfLinks } from "./sitemap-parsers";
 import { configType } from "./types";
-import chunk from "lodash.chunk"
+import chunk from "lodash.chunk";
 
 const waitForLoadStateConfig = {
   document: {
@@ -17,7 +17,12 @@ const waitForLoadStateConfig = {
 
 let visitCounter = 0;
 
-const visitSite = async (link: string, config: configType, context: BrowserContext, links: string[] ) => {
+const visitSite = async (
+  link: string,
+  config: configType,
+  context: BrowserContext,
+  links: string[],
+) => {
   const page = await context.newPage();
   let response;
 
@@ -44,7 +49,7 @@ const visitSite = async (link: string, config: configType, context: BrowserConte
         response.status() ===
         200 /* && response.url() !== 'https://www.profiq.com/job/junior-developer/'*/
       ) {
-        visitCounter++
+        visitCounter++;
         const localCounter = visitCounter;
         logger.log(
           "info",
@@ -58,10 +63,10 @@ const visitSite = async (link: string, config: configType, context: BrowserConte
             ),
           ),
         );
-        page.close()
-        return 0
+        page.close();
+        return 0;
       } else {
-        visitCounter++
+        visitCounter++;
         const localCounter = visitCounter;
         logger.log(
           "error",
@@ -73,26 +78,22 @@ const visitSite = async (link: string, config: configType, context: BrowserConte
             response.url(),
           ),
         );
-        page.close()
-        return 1
+        page.close();
+        return 1;
       }
     } else {
-      visitCounter++
+      visitCounter++;
       logger.log("error", chalk.red("response is null"));
-      page.close()
-      return 1
+      page.close();
+      return 1;
     }
   } catch (error) {
-    visitCounter++
+    visitCounter++;
     logger.log("error", `Error processing the request ${link}, error: ${error}`);
-    page.close()
-    return 1
+    page.close();
+    return 1;
   }
-
-
-}
-
-
+};
 
 /**
  * visits all our specified links, each visit reports to log file and console, summarizes successful and failed visits, logs total time
@@ -105,35 +106,34 @@ async function visitSitesWinston(links: string[], config: configType) {
   let numOfOK = 0;
   let numOfErrors = 0;
 
-  if(config.parallelBlockSize === 0 || config.parallelBlockSize ===1){
+  if (config.parallelBlockSize === 0 || config.parallelBlockSize === 1) {
     logger.log("info", "visiting links in non-parallel mode");
-  }
-  else{
-    logger.log("info", `visiting links in parallel mode, block size: ${config.parallelBlockSize}`);
+  } else {
+    logger.log(
+      "info",
+      `visiting links in parallel mode, block size: ${config.parallelBlockSize}`,
+    );
   }
   logger.log("info", `expected total number of links: ${totalNumberOfLinks}\n`);
 
   const sTotalTime = performance.now();
 
-
-
-  const chunkedLinks = chunk(links, (config.parallelBlockSize) ? config.parallelBlockSize : 1)
+  const chunkedLinks = chunk(links, config.parallelBlockSize ? config.parallelBlockSize : 1);
   visitCounter = 0;
 
-  for(const chunk of chunkedLinks){
+  for (const chunk of chunkedLinks) {
+    const promisedVisitSites = chunk.map((link) => {
+      return visitSite(link, config, context, links);
+    });
 
-    const promisedVisitSites = chunk.map((link)=>{
-      return visitSite(link, config, context, links)
-    })
+    const results = await Promise.all(promisedVisitSites);
 
-    const results = await Promise.all(promisedVisitSites)
-
-    for(const result of results){
-      if(result === 0){
+    for (const result of results) {
+      if (result === 0) {
         numOfOK++;
-    } else {
+      } else {
         numOfErrors++;
-    }
+      }
     }
   }
 

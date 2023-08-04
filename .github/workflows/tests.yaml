@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test-build-prettier:
+    name: Build, Test and check prettier
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: tests-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: |
+          npm run build
+      - name: Run Jest Test
+        run: |
+          npm run test
+      - name: Run Prettier
+        run: |
+          npm run lint:prettier
