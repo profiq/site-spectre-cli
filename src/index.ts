@@ -30,9 +30,11 @@ const greeting = argv.greeting as string;
   */
 
 let sites: string[] = [
-  //'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
-  // 'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
- // "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
+  'https://www.profiq.com/wp-sitemap-posts-post-1.xml',
+   'https://www.profiq.com/wp-sitemap-posts-page-1.xml',
+  "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
+
+  //"https://movingfast.tech/post-sitemap.xml"
 ];
 
 const config: configType = {
@@ -41,7 +43,7 @@ const config: configType = {
   utilizeWaitForLoadState: true,
   // TODO custom playwrigth headers || add to both fetch and playwright
   // custom headesr --> array
-  parallelBlockSize: 2,
+  parallelBlockSize: 5,
   customHeaders: {},
 };
 
