@@ -139,5 +139,11 @@ const linksToArray = async (url: string, sites: string[] = []): Promise<string[]
   return links;
 };
 
-
-export { linksToArray, totalNumberOfLinks, _readSitemap, _txtLinkToArray, _objToArray, _parseSitemap };
+export {
+  linksToArray,
+  totalNumberOfLinks,
+  _readSitemap,
+  _txtLinkToArray,
+  _objToArray,
+  _parseSitemap,
+};
