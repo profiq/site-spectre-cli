@@ -9,7 +9,7 @@ let totalNumberOfLinks = 0;
  * @param url url of website we want to read data from
  * @returns site data in string format
  */
-const readSitemap = async (url: string): Promise<string> => {
+const _readSitemap = async (url: string): Promise<string> => {
   const response = await fetch(url);
   const data = await response.text();
 
@@ -21,9 +21,9 @@ const readSitemap = async (url: string): Promise<string> => {
  * @param url url of website we want to read data from
  * @returns fast-xml-parser object with xml data from website
  */
-const parseSitemap = async (url: string) => {
+const _parseSitemap = async (url: string) => {
   const parser = new XMLParser();
-  const data = await readSitemap(url);
+  const data = await _readSitemap(url);
 
   try {
     const parsedSitemapObject = await parser.parse(data);
@@ -46,8 +46,8 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
   let tmpLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
-    let parsedSitemapObject = await parseSitemap(links[i]);
-    tmpLinks = await objToArray(parsedSitemapObject);
+    let parsedSitemapObject = await _parseSitemap(links[i]);
+    tmpLinks = await _objToArray(parsedSitemapObject);
 
     for (let j = 0; j < tmpLinks.length; j++) {
       expandedLinks.push(tmpLinks[j]);
@@ -63,36 +63,11 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
 };
 
 /**
- * Extracts the url links from the object and moves them into an array
- * @param jObj fast-xml-parser object
- * @returns array of links
- */
-async function objToArray2(jObj: any): Promise<string[]> {
-  let links: string[] = [];
-
-  if (jObj.hasOwnProperty("sitemapindex")) {
-    for (let i = 0; i < jObj.sitemapindex.sitemap.length; i++) {
-      links.concat(await extractLinks([jObj.sitemapindex.sitemap[i].loc]));
-      // links.push();
-    }
-    return links;
-  } else if (jObj.hasOwnProperty("urlset")) {
-    for (let i = 0; i < jObj.urlset.url.length; i++) {
-      links.push(jObj.urlset.url[i].loc);
-    }
-    return links;
-  } else {
-    logger.log("error", chalk.red("xml doesnt have property sitemapindex or urlset"));
-    return [];
-  }
-}
-
-/**
  * Extracts the url links from the parsedSitemapObject and moves them into an array
  * @param parsedSitemapObject fast-xml-parser object
  * @returns array of links
  */
-const objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
+const _objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
   let links: string[] = [];
   let tmpLinks: string[] = [];
 
@@ -115,13 +90,13 @@ const objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
 
 /**
  * Reads all the url links from a .txt sitemap and seperates them into array of urls.
- * Same functionality as objToArray but for .txt sitemaps
+ * Same functionality as _objToArray but for .txt sitemaps
  * @param url link to the .txt sitemap
  * @returns array of links
  */
-const txtLinkToArray = async (url: string) => {
+const _txtLinkToArray = async (url: string) => {
   try {
-    const data = await readSitemap(url);
+    const data = await _readSitemap(url);
     let tmpArray = data.split("\n");
     let finalArray: string[] = [];
 
@@ -134,7 +109,7 @@ const txtLinkToArray = async (url: string) => {
 
     return finalArray;
   } catch (error) {
-    logger.log("error", `Error reading links from .txt sitemap ${error}`);
+    logger.log("error", `Error reading links from .txt sitemap, error: ${error}`);
     return [];
   }
 };
@@ -151,32 +126,18 @@ const linksToArray = async (url: string, sites: string[] = []): Promise<string[]
   let links = [];
 
   if (url.endsWith(".txt")) {
-    links = await txtLinkToArray(url);
+    links = await _txtLinkToArray(url);
     return links;
   }
 
   if (sites.length) {
     return extractLinks(sites);
   }
-  let parsedSitemapObject = await parseSitemap(url);
+  let parsedSitemapObject = await _parseSitemap(url);
 
-  links = await objToArray(parsedSitemapObject);
+  links = await _objToArray(parsedSitemapObject);
   return links;
 };
 
-/**
- * Old function, no longer used, similiar to linksToArray
- * @param url
- * @returns
- */
-async function linksToArrayOld(url: string) {
-  let jObj = await parseSitemap(url);
-  let links = [];
 
-  for (let i = 0; i < jObj.sitemapindex.sitemap.length; i++) {
-    links[i] = jObj.sitemapindex.sitemap[i].loc;
-  }
-  return links;
-}
-
-export { linksToArray, totalNumberOfLinks, readSitemap };
+export { linksToArray, totalNumberOfLinks, _readSitemap, _txtLinkToArray, _objToArray, _parseSitemap };

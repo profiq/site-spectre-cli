@@ -57,7 +57,7 @@ const formatConnectionMessage = (
   elapsed_time: number,
   url: string,
 ): string => {
-  return `${counter + 1}/${maxCounter} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
+  return `${counter}/${maxCounter} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
 };
 
 const logger = newLogger();
