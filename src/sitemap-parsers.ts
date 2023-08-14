@@ -1,6 +1,7 @@
 import { XMLParser } from "fast-xml-parser";
 import { formatConnectionMessage, newLogger, logger } from "./logger";
 import chalk from "chalk";
+import { log } from "console";
 
 let totalNumberOfLinks = 0;
 
@@ -25,15 +26,8 @@ const _parseSitemap = async (url: string) => {
   const parser = new XMLParser();
   const data = await _readSitemap(url);
 
-  try {
-    const parsedSitemapObject = await parser.parse(data);
-    return parsedSitemapObject;
-  } catch (error) {
-    logger.log(
-      "error",
-      `Error parsing xml data to fast-xml-parser object, url: ${url}, error: ${error}`,
-    );
-  }
+  const parsedSitemapObject = await parser.parse(data);
+  return parsedSitemapObject;
 };
 
 /**
@@ -125,16 +119,20 @@ const _txtLinkToArray = async (url: string) => {
 const linksToArray = async (url: string, sites: string[] = []): Promise<string[]> => {
   let links = [];
 
+  if (sites.length) {
+    logger.log("info", `reading from array of xml sites, num of links: ${sites.length}\n`);
+    return extractLinks(sites);
+  }
+
   if (url.endsWith(".txt")) {
+    logger.log("info", "reading from txt sitemap\n");
     links = await _txtLinkToArray(url);
     return links;
   }
 
-  if (sites.length) {
-    return extractLinks(sites);
-  }
   let parsedSitemapObject = await _parseSitemap(url);
 
+  logger.log("info", "reading from xml site\n");
   links = await _objToArray(parsedSitemapObject);
   return links;
 };

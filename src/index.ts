@@ -1,4 +1,4 @@
-import { linksToArray, _readSitemap } from "./sitemap-parsers";
+import { linksToArray, _readSitemap, _parseSitemap } from "./sitemap-parsers";
 import { configType, visitSitesWinston } from "./link-visit";
 import yargs from "yargs";
 import { Interface } from "readline";
@@ -30,10 +30,9 @@ const greeting = argv.greeting as string;
   */
 
 let sites: string[] = [
-  "https://www.profiq.com/wp-sitemap-posts-post-1.xml",
-  "https://www.profiq.com/wp-sitemap-posts-page-1.xml",
-  "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
-
+  // "https://www.profiq.com/wp-sitemap-posts-post-1.xml",
+  // "https://www.profiq.com/wp-sitemap-posts-page-1.xml",
+  // "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
   //"https://movingfast.tech/post-sitemap.xml"
 ];
 
@@ -43,7 +42,7 @@ const config: configType = {
   utilizeWaitForLoadState: true,
   // TODO custom playwrigth headers || add to both fetch and playwright
   // custom headesr --> array
-  parallelBlockSize: 5,
+  parallelBlockSize: 10,
   customHeaders: {},
 };
 
@@ -52,11 +51,11 @@ const sitetxt1 = "https://www.advancedhtml.co.uk/sitemap.txt";
 const sitetxt2 = "https://www.coh3stats.com/sitemap.txt";
 
 const runMain = async () => {
-  const linksToVisit = await linksToArray(profiq, sites);
+  const linksToVisit = await linksToArray("https://steamcharts.com/app/730", sites);
 
-  //console.log(linksToVisit);
+  console.log(await _parseSitemap("https://steamcharts.com/app/730"));
 
-  await visitSitesWinston(linksToVisit, config);
+  //wait visitSitesWinston(linksToVisit, config);
   //const tmp = await _readSitemap('https://www.advancedhtml.co.uk/sitemap.txt');
   //console.log(tmp.split(/\n/));
 };
