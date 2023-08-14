@@ -114,7 +114,19 @@ async function visitSitesWinston(links: string[], config: configType) {
       `visiting links in parallel mode, block size: ${config.parallelBlockSize}`,
     );
   }
-  logger.log("info", `expected total number of links: ${totalNumberOfLinks}\n`);
+  if (config.utilizeWaitForLoadState) {
+    logger.log(
+      "info",
+      `waiting for load state: ${config.utilizeWaitForLoadState}, load state mode: ${config.pageLoadType}`,
+    );
+  } else {
+    logger.log("info", `waiting for load state: ${config.utilizeWaitForLoadState}`);
+  }
+
+  logger.log(
+    "info",
+    `expected total number of links: ${totalNumberOfLinks}, request timeout ${config.requestTimeout} ms\n`,
+  );
 
   const sTotalTime = performance.now();
 
