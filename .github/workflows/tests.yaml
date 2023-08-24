@@ -43,3 +43,6 @@ jobs:
       - name: Run with xml with final links
         run: |
           node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -t 4500
+      - name: Run with xml with nested links
+        run: |
+          node dist/src/index.js https://movingfast.tech/sitemap.xml -w
