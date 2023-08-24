@@ -109,7 +109,10 @@ const visitConfigPrint = (config: configType) => {
     logger.log(
       "info",
       printPrefix(
-        `Using config file: ${config.configFilePath} | Command line options take priority over config file`,
+        `Using config file: ${config.configFilePath} | Command line options take priority over config file\n` +
+          chalk.yellow(
+            "   CAUTION: If using default values manually (E.g. -p 2), then they will NOT take priority over config file.",
+          ),
       ),
     );
   }
@@ -119,49 +122,49 @@ const visitConfigPrint = (config: configType) => {
       "info",
       printPrefix(chalk.yellow("Dry run, will only print links without visiting.")),
     );
+  }
+  if (config.silentRun) {
+    logger.log("info", printPrefix(chalk.yellow("Silent run, will only print errors")));
+  }
+  if (config.parallelBlockSize === 0 || config.parallelBlockSize === 1) {
+    logger.log(
+      "info",
+      printPrefix("parallelism: off | Will visit links in non-parallel mode. Setup using -p."),
+    );
   } else {
-    if (config.silentRun) {
-      logger.log("info", printPrefix(chalk.yellow("Silent run, will only print errors")));
-    }
-    if (config.parallelBlockSize === 0 || config.parallelBlockSize === 1) {
-      logger.log(
-        "info",
-        printPrefix("parallelism: off | Will visit links in non-parallel mode. Setup using -p."),
-      );
-    } else {
-      logger.log(
-        "info",
-        printPrefix(
-          `paralleism: ${config.parallelBlockSize} | Will visit with ${config.parallelBlockSize} requests. Setup using -p.`,
-        ),
-      );
-    }
     logger.log(
       "info",
       printPrefix(
-        `timeout: ${config.requestTimeout} ms | Time until request times out. Setup using -t.`,
+        `paralleism: ${config.parallelBlockSize} | Will visit with ${config.parallelBlockSize} requests. Setup using -p.`,
       ),
     );
-    if (config.utilizeWaitForLoadState) {
-      logger.log(
-        "info",
-        printPrefix(
-          `Wait for load state: on | Will wait for load state specified in next line. Disable using -w.`,
-        ),
-      );
-      logger.log(
-        "info",
-        printPrefix(
-          `Load state mode: ${config.pageLoadType} | Waits for specified option. Change using -l.`,
-        ),
-      );
-    } else {
-      logger.log(
-        "info",
-        printPrefix(`Wait for load state: off | Will not wait for load state. You used -w.`),
-      );
-    }
   }
+  logger.log(
+    "info",
+    printPrefix(
+      `timeout: ${config.requestTimeout} ms | Time until request times out. Setup using -t.`,
+    ),
+  );
+  if (config.utilizeWaitForLoadState) {
+    logger.log(
+      "info",
+      printPrefix(
+        `Wait for load state: on | Will wait for load state specified in next line. Disable using -w.`,
+      ),
+    );
+    logger.log(
+      "info",
+      printPrefix(
+        `Load state mode: ${config.pageLoadType} | Waits for specified option. Change using -l.`,
+      ),
+    );
+  } else {
+    logger.log(
+      "info",
+      printPrefix(`Wait for load state: off | Will not wait for load state. You used -w.`),
+    );
+  }
+
   if (config.sitesFilePath) {
     logger.log("info", printPrefix(`Using links from file: ${config.sitesFilePath}`));
   }

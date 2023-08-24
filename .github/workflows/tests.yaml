@@ -33,3 +33,6 @@ jobs:
       - name: Run Prettier
         run: |
           npm run lint:prettier
+      - name: Run with txt sitemap
+        run: |
+          node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -p 5 -t 4000

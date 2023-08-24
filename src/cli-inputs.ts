@@ -4,8 +4,9 @@ import { logger } from "./logger";
 import { configType } from "./types";
 import { OptionValues } from "commander";
 
-const defaultTimeout = 5000;
-const defaultParallel = 2;
+//in string format because of commanderJS option format requirement
+const defaultTimeout = "5000";
+const defaultParallel = "2";
 
 const sitesInput = (filePath: string): string[] => {
   if (filePath) {
@@ -60,14 +61,32 @@ const pasteConfigFile = (config: configType, customConfigFile: any) => {
   config.sitesFilePath = customConfigFile.sitesFilePath;
 };
 
-const updateConfig = (config: configType, options: OptionValues) => {
+const updateConfig = (config: configType, options: OptionValues, customConfigFile: any) => {
   //pageLoad
   if (options.requestTimeout !== defaultTimeout) {
     config.requestTimeout = options.requestTimeout;
+  } else {
+    config.requestTimeout = customConfigFile.requestTimeout;
   }
+
   if (options.parallel !== defaultParallel) {
     config.parallelBlockSize = options.parallel;
+  } else {
+    config.parallelBlockSize = customConfigFile.parallelBlockSize;
   }
+  if (options.pageLoadType == "document") {
+    config.pageLoadType = customConfigFile.pageLoadType;
+  } else {
+    config.pageLoadType = "network";
+  }
+
+  config.dryRun = options.dry ? true : customConfigFile.dryRun;
+  config.debugMode = options.debug ? true : customConfigFile.debugMode;
+  config.silentRun = options.silent ? true : customConfigFile.silentRun;
+  config.configFilePath = options.configFile
+    ? options.configFile
+    : customConfigFile.configFilePath;
+  config.sitesFilePath = options.inputFile ? options.inputFile : customConfigFile.sitesFilePath;
 };
 
 const checkConfigFile = (config: any, options: OptionValues) => {
@@ -76,7 +95,7 @@ const checkConfigFile = (config: any, options: OptionValues) => {
       try {
         const data = readFileSync(options.configFile, { encoding: "utf-8", flag: "r" });
         const customConfigFile = JSON.parse(data);
-        pasteConfigFile(config, customConfigFile);
+        updateConfig(config, options, customConfigFile);
       } catch (error) {
         logger.log("error", `Error reading file, error: ${error}`);
       }
