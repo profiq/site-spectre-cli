@@ -1,0 +1,12 @@
+{
+  "pageLoadType": "network",
+  "requestTimeout": 6666,
+  "noWaitForLoadState": false,
+  "parallelBlockSize": 7,
+  "customHeaders": {},
+  "dryRun": false,
+  "debugMode": false,
+  "silentRun": true,
+  "configFilePath": "visitConfig.json",
+  "sitesFilePath": ""
+}

@@ -2,15 +2,13 @@ import { createLogger, format, transports } from "winston";
 import chalk from "chalk";
 
 const newLogger = () => {
+  //@ts-ignore
+  const customFormat = format.printf(({ message }) => {
+    return `${message}`;
+  });
+
   const logger = createLogger({
     level: "info",
-    /*,
-        format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss'
-        }),
-        format.errors({ stack: true }),
-        format.splat(),
-        format.json()*/
     format: format.simple(),
     //defaultMeta: { service: 'your-service-name' },
     transports: [
@@ -41,7 +39,7 @@ const newLogger = () => {
       new transports.Console({
         format: format.combine(
           format.colorize({ message: true, colors: { error: "red", info: "white" } }),
-          format.simple(),
+          customFormat,
         ),
       }),
     );
@@ -60,6 +58,10 @@ const formatConnectionMessage = (
   return `${counter}/${maxCounter} - ${status} -  ${Math.floor(elapsed_time)} ms - ${url}`;
 };
 
+const printPrefix = (message: string): string => {
+  return ` - ${message}`;
+};
+
 const logger = newLogger();
 
-export { newLogger, formatConnectionMessage, logger };
+export { newLogger, formatConnectionMessage, logger, printPrefix };

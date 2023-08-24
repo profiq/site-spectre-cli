@@ -48,7 +48,7 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
     }
     logger.log(
       "info",
-      `\nFound sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
+      `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
     );
     totalNumberOfLinks += tmpLinks.length;
   }
@@ -82,6 +82,19 @@ const _objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
   }
 };
 
+const splitLinks = (data: string) => {
+  let tmpArray = data.split("\n");
+  let finalArray: string[] = [];
+
+  tmpArray.forEach((element) => {
+    if (element.startsWith("http")) {
+      finalArray.push(element);
+    }
+  });
+
+  return finalArray;
+};
+
 /**
  * Reads all the url links from a .txt sitemap and seperates them into array of urls.
  * Same functionality as _objToArray but for .txt sitemaps
@@ -90,7 +103,9 @@ const _objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
  */
 const _txtLinkToArray = async (url: string) => {
   try {
+
     const data = await _readSitemap(url);
+
     let tmpArray = data.split("\n");
     let finalArray: string[] = [];
 
@@ -119,6 +134,8 @@ const _txtLinkToArray = async (url: string) => {
 const linksToArray = async (url: string, sites: string[] = []): Promise<string[]> => {
   let links = [];
 
+
+
   if (sites.length) {
     logger.log("info", `reading from array of xml sites, num of links: ${sites.length}\n`);
     return extractLinks(sites);
@@ -144,4 +161,5 @@ export {
   _txtLinkToArray,
   _objToArray,
   _parseSitemap,
+  splitLinks,
 };
