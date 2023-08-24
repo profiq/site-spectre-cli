@@ -1,33 +1,63 @@
 import { linksToArray, _readSitemap, _parseSitemap } from "./sitemap-parsers";
-import { configType, visitSitesWinston } from "./link-visit";
-import yargs from "yargs";
+import { visitConfigPrint, visitSitesWinston } from "./link-visit";
+import yargs, { option } from "yargs";
 import { Interface } from "readline";
+import { Command, Option } from "commander";
+import packageJSON from "../package.json";
+import { logger } from "./logger";
+import {
+  checkConfigFile,
+  createConfig,
+  defaultParallel,
+  defaultTimeout,
+  sitesInput,
+} from "./cli-inputs";
+import chalk from "chalk";
+import { configType } from "./types";
+import { existsSync, readFileSync } from "fs";
 
-/*
-const argv = yargs
-  .option('name', {
-    alias: 'n',
-    describe: 'Your name',
-    type: 'string',
-    demandOption: true, // The option is required
-  })
-  .option('greeting', {
-    alias: 'g',
-    describe: 'A greeting message',
-    type: 'string',
-    default: 'Hello',
-  })
-  .argv;
+const program = new Command();
 
-// Access the parsed arguments and options
-//@ts-ignore
-const name = argv.name as string;
-//@ts-ignore
-const greeting = argv.greeting as string;
+program
+  .version(packageJSON.version)
+  .description("Visits all links in xml/txt sitemap")
+  .argument("<url>", "Url of sitemap we want to visit")
+  .option(
+    "-p, --parallel <value>",
+    "Number of concurrent threads visiting the target domain.",
+    defaultParallel.toString(),
+  )
+  .option(
+    "-t, --request-timeout <value>",
+    "Number of ms until the requests wait for finish.",
+    defaultTimeout.toString(),
+  )
+  //.option('-l, --page-load-type <value>', 'Type of wait until the page is loaded. Either document or network. Use network with extra caution.', 'document')
+  .addOption(
+    new Option(
+      "-l, --page-load-type <value>",
+      "Type of wait until the page is loaded. Use network with extra caution.",
+    )
+      .choices(["document", "network"])
+      .default("document"),
+  )
+  .option("-w, --no-wait-page-load", "Disable waiting for page to be loaded.")
+  .option("-h, --custom-headers", "Pass a custom header.") //
+  .option("-d, --debug", "Sets the prinout level to debug.") //
+  .option("-D, --dry", "Just prints the links it would visit without visiting.")
+  .option("-s, --silent", "Log only errors.")
+  .option(
+    "-c, --config-file <filePath>",
+    "JSON config file, if you specify any other parameters, they override the config file.",
+  )
+  .option("-f, --input-file <filePath>", "Txt file with 1 sitemap link on each line."),
+  program.parse(process.argv);
 
-  console.log(`Hello, ${name}! You are ${greeting} years old.`);
+const options = program.opts();
 
-  */
+const config = createConfig(options);
+
+checkConfigFile(config, options);
 
 let sites: string[] = [
   // "https://www.profiq.com/wp-sitemap-posts-post-1.xml",
@@ -36,28 +66,20 @@ let sites: string[] = [
   //"https://movingfast.tech/post-sitemap.xml"
 ];
 
-const config: configType = {
-  pageLoadType: "document",
-  requestTimeout: 5000,
-  utilizeWaitForLoadState: true,
-  // TODO custom playwrigth headers || add to both fetch and playwright
-  // custom headesr --> array
-  parallelBlockSize: 10,
-  customHeaders: {},
-};
+visitConfigPrint(config);
 
-const profiq = "https://www.profiq.com/wp-sitemap.xml";
-const sitetxt1 = "https://www.advancedhtml.co.uk/sitemap.txt";
-const sitetxt2 = "https://www.coh3stats.com/sitemap.txt";
-
+/*
 const runMain = async () => {
-  const linksToVisit = await linksToArray("https://steamcharts.com/app/730", sites);
 
-  console.log(await _parseSitemap("https://steamcharts.com/app/730"));
 
-  //wait visitSitesWinston(linksToVisit, config);
+  const linksToVisit = await linksToArray(program.args[0], sitesInput(options.inputFile));
+
+  //console.log(await _parseSitemap("https://steamcharts.com/app/730"));
+
+  await visitSitesWinston(linksToVisit, config);
   //const tmp = await _readSitemap('https://www.advancedhtml.co.uk/sitemap.txt');
   //console.log(tmp.split(/\n/));
 };
-
 runMain().then(() => {});
+
+*/
