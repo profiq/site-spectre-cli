@@ -9,6 +9,7 @@
     "build:watch": "tsc --watch",
     "start": "node dist/src/index.js",
     "config": "node dist/src/index.js ada -c visitConfig.json",
+    "startConfig": "node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -c visitConfig.json",
     "fix": "prettier --loglever warn --write .",
     "lint:prettier": "prettier --check .",
     "reinstall": "rm -fr node_modules && npm install"

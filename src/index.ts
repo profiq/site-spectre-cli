@@ -25,14 +25,13 @@ program
   .option(
     "-p, --parallel <value>",
     "Number of concurrent threads visiting the target domain.",
-    defaultParallel.toString(),
+    defaultParallel,
   )
   .option(
     "-t, --request-timeout <value>",
     "Number of ms until the requests wait for finish.",
-    defaultTimeout.toString(),
+    defaultTimeout,
   )
-  //.option('-l, --page-load-type <value>', 'Type of wait until the page is loaded. Either document or network. Use network with extra caution.', 'document')
   .addOption(
     new Option(
       "-l, --page-load-type <value>",
@@ -48,7 +47,7 @@ program
   .option("-s, --silent", "Log only errors.")
   .option(
     "-c, --config-file <filePath>",
-    "JSON config file, if you specify any other parameters, they override the config file.",
+    "JSON config file, if you specify any other parameters, they take priority over the config file.",
   )
   .option("-f, --input-file <filePath>", "Txt file with 1 sitemap link on each line."),
   program.parse(process.argv);
@@ -63,14 +62,15 @@ let sites: string[] = [
   // "https://www.profiq.com/wp-sitemap-posts-post-1.xml",
   // "https://www.profiq.com/wp-sitemap-posts-page-1.xml",
   // "https://www.profiq.com/wp-sitemap-posts-job-1.xml",
-  //"https://movingfast.tech/post-sitemap.xml"
+  // "https://movingfast.tech/post-sitemap.xml"
 ];
 
 visitConfigPrint(config);
 
-/*
-const runMain = async () => {
 
+
+
+const runMain = async () => {
 
   const linksToVisit = await linksToArray(program.args[0], sitesInput(options.inputFile));
 
@@ -82,4 +82,4 @@ const runMain = async () => {
 };
 runMain().then(() => {});
 
-*/
+

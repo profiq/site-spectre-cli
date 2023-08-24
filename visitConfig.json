@@ -1,5 +1,5 @@
 {
-  "pageLoadType": "network",
+  "pageLoadType": "document",
   "requestTimeout": 6666,
   "noWaitForLoadState": false,
   "parallelBlockSize": 7,
