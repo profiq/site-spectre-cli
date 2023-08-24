@@ -103,7 +103,6 @@ const splitLinks = (data: string) => {
  */
 const _txtLinkToArray = async (url: string) => {
   try {
-
     const data = await _readSitemap(url);
 
     let tmpArray = data.split("\n");
@@ -133,8 +132,6 @@ const _txtLinkToArray = async (url: string) => {
  */
 const linksToArray = async (url: string, sites: string[] = []): Promise<string[]> => {
   let links = [];
-
-
 
   if (sites.length) {
     logger.log("info", `reading from array of xml sites, num of links: ${sites.length}\n`);

@@ -5,7 +5,13 @@ import { Interface } from "readline";
 import { Command, Option } from "commander";
 import packageJSON from "../package.json";
 import { logger } from "./logger";
-import { checkConfigFile, createConfig, defaultParallel, defaultTimeout, sitesInput } from "./cli-inputs";
+import {
+  checkConfigFile,
+  createConfig,
+  defaultParallel,
+  defaultTimeout,
+  sitesInput,
+} from "./cli-inputs";
 import chalk from "chalk";
 import { configType } from "./types";
 import { existsSync, readFileSync } from "fs";
@@ -52,7 +58,6 @@ const options = program.opts();
 const config = createConfig(options);
 
 checkConfigFile(config, options);
-
 
 let sites: string[] = [
   // "https://www.profiq.com/wp-sitemap-posts-post-1.xml",

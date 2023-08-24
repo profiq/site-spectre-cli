@@ -26,7 +26,7 @@ const sitesInput = (filePath: string): string[] => {
   }
 };
 
-const createConfig = (options:any) => {
+const createConfig = (options: any) => {
   const config: configType = {
     pageLoadType: options.pageLoadType,
     requestTimeout: Number(options.requestTimeout),
@@ -45,7 +45,7 @@ const createConfig = (options:any) => {
   return config;
 };
 
-const pasteConfigFile = (config: configType, customConfigFile:any) => {
+const pasteConfigFile = (config: configType, customConfigFile: any) => {
   config.pageLoadType = customConfigFile.pageLoadType;
   config.requestTimeout = Number(customConfigFile.requestTimeout);
   config.utilizeWaitForLoadState = customConfigFile.noWaitForLoadState;
@@ -60,25 +60,23 @@ const pasteConfigFile = (config: configType, customConfigFile:any) => {
   config.sitesFilePath = customConfigFile.sitesFilePath;
 };
 
-const updateConfig = (config:configType, options:OptionValues) => {
+const updateConfig = (config: configType, options: OptionValues) => {
   //pageLoad
-  if(options.requestTimeout !== defaultTimeout){
+  if (options.requestTimeout !== defaultTimeout) {
     config.requestTimeout = options.requestTimeout;
   }
-  if(options.parallel !== defaultParallel){
+  if (options.parallel !== defaultParallel) {
     config.parallelBlockSize = options.parallel;
   }
+};
 
-}
-
-const checkConfigFile = (config:any, options:OptionValues) => {
+const checkConfigFile = (config: any, options: OptionValues) => {
   if (options.configFile) {
     if (existsSync(options.configFile)) {
       try {
         const data = readFileSync(options.configFile, { encoding: "utf-8", flag: "r" });
         const customConfigFile = JSON.parse(data);
         pasteConfigFile(config, customConfigFile);
-
       } catch (error) {
         logger.log("error", `Error reading file, error: ${error}`);
       }
@@ -86,8 +84,6 @@ const checkConfigFile = (config:any, options:OptionValues) => {
       logger.log("error", `File doesn't exist or invalid path, path: ${options.configFile}`);
     }
   }
-}
-
-
+};
 
 export { sitesInput, createConfig, checkConfigFile, defaultParallel, defaultTimeout };
