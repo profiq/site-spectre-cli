@@ -67,11 +67,7 @@ let sites: string[] = [
 
 visitConfigPrint(config);
 
-
-
-
 const runMain = async () => {
-
   const linksToVisit = await linksToArray(program.args[0], sitesInput(options.inputFile));
 
   //console.log(await _parseSitemap("https://steamcharts.com/app/730"));
@@ -81,5 +77,3 @@ const runMain = async () => {
   //console.log(tmp.split(/\n/));
 };
 runMain().then(() => {});
-
-

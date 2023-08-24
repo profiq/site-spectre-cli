@@ -65,28 +65,27 @@ const updateConfig = (config: configType, options: OptionValues, customConfigFil
   //pageLoad
   if (options.requestTimeout !== defaultTimeout) {
     config.requestTimeout = options.requestTimeout;
-  }
-  else{
+  } else {
     config.requestTimeout = customConfigFile.requestTimeout;
   }
 
   if (options.parallel !== defaultParallel) {
     config.parallelBlockSize = options.parallel;
-  }
-  else{
+  } else {
     config.parallelBlockSize = customConfigFile.parallelBlockSize;
   }
-  if (options.pageLoadType == 'document'){
+  if (options.pageLoadType == "document") {
     config.pageLoadType = customConfigFile.pageLoadType;
-  }
-  else{
-    config.pageLoadType = 'network';
+  } else {
+    config.pageLoadType = "network";
   }
 
   config.dryRun = options.dry ? true : customConfigFile.dryRun;
-  config.debugMode = options.debug ? true: customConfigFile.debugMode;
-  config.silentRun = options.silent ? true: customConfigFile.silentRun;
-  config.configFilePath = options.configFile ? options.configFile : customConfigFile.configFilePath;
+  config.debugMode = options.debug ? true : customConfigFile.debugMode;
+  config.silentRun = options.silent ? true : customConfigFile.silentRun;
+  config.configFilePath = options.configFile
+    ? options.configFile
+    : customConfigFile.configFilePath;
   config.sitesFilePath = options.inputFile ? options.inputFile : customConfigFile.sitesFilePath;
 };
 
@@ -96,7 +95,7 @@ const checkConfigFile = (config: any, options: OptionValues) => {
       try {
         const data = readFileSync(options.configFile, { encoding: "utf-8", flag: "r" });
         const customConfigFile = JSON.parse(data);
-        updateConfig(config,options, customConfigFile);
+        updateConfig(config, options, customConfigFile);
       } catch (error) {
         logger.log("error", `Error reading file, error: ${error}`);
       }

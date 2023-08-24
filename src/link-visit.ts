@@ -109,7 +109,10 @@ const visitConfigPrint = (config: configType) => {
     logger.log(
       "info",
       printPrefix(
-        `Using config file: ${config.configFilePath} | Command line options take priority over config file\n`+ chalk.yellow("   CAUTION: If using default values manually (E.g. -p 2), then they will NOT take priority over config file."),
+        `Using config file: ${config.configFilePath} | Command line options take priority over config file\n` +
+          chalk.yellow(
+            "   CAUTION: If using default values manually (E.g. -p 2), then they will NOT take priority over config file.",
+          ),
       ),
     );
   }
