@@ -1,6 +1,6 @@
 # Site Spectre CLI
 
-This CLI utility can accept sitemap (xml,txt) of the web, crawl it. And then visit all the links listed with headless browser. Or you can use it to just get the list of all pages in the sitemap.
+CLI utility which accepts link to sitemap (xml,txt) of the web, crawls it. And then visits all the links listed with headless browser. Or you can use it to just get the list of all pages in the sitemap.
 
 ### Why?
 
