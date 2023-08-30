@@ -42,7 +42,7 @@ program
   )
   .option("-w, --no-wait-page-load", "Disable waiting for page to be loaded.")
   .option("-h, --custom-headers", "Pass a custom header.") //
-  // .option("-d, --debug", "Sets the prinout level to debug.") //
+  .option("-d, --debug", "Sets the prinout level to debug.") //
   .option("-D, --dry", "Just prints the links it would visit without visiting.")
   .option("-s, --silent", "Log only errors.")
   .option(
