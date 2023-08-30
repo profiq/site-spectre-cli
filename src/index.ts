@@ -1,4 +1,4 @@
-import { linksToArray, _readSitemap, _parseSitemap } from "./sitemap-parsers";
+import { processSitemap, _readSitemap, _parseSitemap } from "./sitemap-parsers";
 import { visitConfigPrint, visitSitesWinston } from "./link-visit";
 import yargs, { option } from "yargs";
 import { Interface } from "readline";
@@ -71,7 +71,7 @@ visitConfigPrint(config);
 
 const runMain = async () => {
   //prejmenovat linksToarary ProcessSitemap
-  const linksToVisit = await linksToArray(program.args[0], sitesInput(options.inputFile));
+  const linksToVisit = await processSitemap(program.args[0], sitesInput(options.inputFile));
 
   await visitSitesWinston(linksToVisit, config);
 };

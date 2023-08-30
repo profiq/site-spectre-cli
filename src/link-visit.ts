@@ -2,7 +2,7 @@ import exp from "constants";
 import { BrowserContext, Page, chromium, devices } from "playwright-chromium";
 import { formatConnectionMessage, newLogger, logger, printPrefix } from "./logger";
 import chalk from "chalk";
-import { linksToArray, totalNumberOfLinks } from "./sitemap-parsers";
+import { totalNumberOfLinks } from "./sitemap-parsers";
 import { configType } from "./types";
 import chunk from "lodash.chunk";
 
