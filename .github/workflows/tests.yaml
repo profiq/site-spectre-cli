@@ -15,8 +15,8 @@ jobs:
         node-version: [18.x, 20.x]
 
     concurrency:
-      group: tests-${{ github.ref }}
-      cancel-in-progress: false
+      group: tests-${{ github.ref }}-${{ matrix.node-version }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout Repo
