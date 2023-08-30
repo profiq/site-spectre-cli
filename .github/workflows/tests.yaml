@@ -39,10 +39,10 @@ jobs:
           npm run lint:prettier
       - name: Run with txt sitemap
         run: |
-          node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -p 3 -w
+          node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -p 3
       - name: Run with xml with final links
         run: |
-          node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -t 4500
+          node dist/src/index.js https://www.profiq.com/wp-sitemap-posts-job-1.xml -t 4500
       - name: Run with xml with nested links
         run: |
           node dist/src/index.js https://movingfast.tech/sitemap.xml -w
