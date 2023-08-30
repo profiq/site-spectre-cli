@@ -29,19 +29,47 @@ If using npm command, need to seperate additional commands using "--" (npm run s
 
 ### Config file
 
-Edit the visitConfig.json file with your desired options and use it in the command line (-c visitConfig.json). You don't need to specify all the options if you want to use default options.
+Edit the visitConfig.json file with your desired options, filename and use it in the command line (-c yourConfig.json).
+
+You don't need to specify all the options if you want to use default options.
 
 Command line commands will take priority over your config file. However they will **_NOT take priority_** if trying to use default values in command line (e.g. -p 2), in this case the config file would take priority. _(no way to check if option has been called or not, if there is a default value for the option)_
 
-Additional info regarding options:
+### Arguments and options:
+
+#### URL _(argument, no flag)_
+
+Required argument. Url of xml or txt sitemap, best to use root of your sitemap. Will extract nested sitemaps if sitemap contains additional xml sitemaps.
+
+#### Parallel _(-p, -parallel)_
+
+Parallel visit block size. Number of headless browser instances used at once. Don't DDOS your own server. Defaults to 2. Value of 1 disables parallelism.
+
+#### Request timeout _(-t, -request-timeout)_
+
+Ammount of time in ms browser instance will wait until timing out. Defaults to 5000.
 
 #### Page load type
 
-If using the network option you may run into long visits, more info [here](https://playwright.dev/docs/api/class-page#page-wait-for-load-state).
+Either document or network, defaults to document. If using the network option you may run into long visits, more info [here](https://playwright.dev/docs/api/class-page#page-wait-for-load-state).
+
+#### No wait page load _(-l, -no-wait-page-load)_
+
+Browser will just request the link and will close right after (might not load all site assets). Ignores the page load type mentioned above.
 
 #### Custom headers
 
 TODO
+
+#### Dry run
+
+Doesn't visit any links, just extracts all the links it would visit and prints those links.
+
+#### Silent run
+
+Doesn't print successful link visits. _Only prints visit config, found sitemaps, errors, summary of all visits._
+
+#### [Config file](#config-file)
 
 #### Input file
 

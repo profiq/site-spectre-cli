@@ -41,24 +41,29 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
   let tmpLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
-    if (links[i].endsWith(".xml")) {
-      let parsedSitemapObject = await _parseSitemap(links[i]);
-      tmpLinks = await _objToArray(parsedSitemapObject);
-    } else if (links[i].endsWith(".txt")) {
-      tmpLinks = await _txtLinkToArray(links[i]);
-    } else {
-      logger.log("error", `Invalid sitemap: ${links[i]}\n`);
-      continue;
-    }
+    try {
+      if (links[i].endsWith(".xml")) {
+        let parsedSitemapObject = await _parseSitemap(links[i]);
+        tmpLinks = await _objToArray(parsedSitemapObject);
+      } else if (links[i].endsWith(".txt")) {
+        tmpLinks = await _txtLinkToArray(links[i]);
+        //aa
+      } else {
+        logger.log("error", `Invalid sitemap: ${links[i]}\n`);
+        continue;
+      }
 
-    for (let j = 0; j < tmpLinks.length; j++) {
-      expandedLinks.push(tmpLinks[j]);
+      for (let j = 0; j < tmpLinks.length; j++) {
+        expandedLinks.push(tmpLinks[j]);
+      }
+      logger.log(
+        "info",
+        `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
+      );
+      //totalNumberOfLinks += tmpLinks.length;
+    } catch (error) {
+      logger.log("error", `Error extracting links from ${links[i]}, error: ${error}`);
     }
-    logger.log(
-      "info",
-      `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
-    );
-    //totalNumberOfLinks += tmpLinks.length;
   }
 
   return expandedLinks;
@@ -139,7 +144,7 @@ const _txtLinkToArray = async (url: string) => {
  * @param sites - array of xml site links we want to visit, optional
  * @returns array of all xml sitemap links we will visit
  */
-const linksToArray = async (url: string, sites: string[] = []): Promise<string[]> => {
+const processSitemap = async (url: string, sites: string[] = []): Promise<string[]> => {
   let links = [];
 
   if (sites.length) {
@@ -148,21 +153,23 @@ const linksToArray = async (url: string, sites: string[] = []): Promise<string[]
   }
 
   if (url.endsWith(".txt")) {
-    logger.log("info", "reading from txt sitemap\n");
-    links = await _txtLinkToArray(url);
-    return links;
+    logger.log("info", `Reading from txt sitemap, link: ${url}\n`);
+    // links = await _txtLinkToArray(url);
+    // return links;
+  } else {
+    logger.log("info", `Reading from xml sitemap, link: ${url}\n`);
   }
   //vymenit objToarray a parseSitemap za extractLinks
   //try catch do extractLinks
-  let parsedSitemapObject = await _parseSitemap(url);
+  // let parsedSitemapObject = await _parseSitemap(url);
 
-  logger.log("info", "reading from xml site\n");
-  links = await _objToArray(parsedSitemapObject);
-  return links;
+  return extractLinks([url]);
+  // links = await _objToArray(parsedSitemapObject);
+  // return links;
 };
 
 export {
-  linksToArray,
+  processSitemap,
   totalNumberOfLinks,
   _readSitemap,
   _txtLinkToArray,
