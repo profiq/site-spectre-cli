@@ -80,6 +80,9 @@ const visitSite = async (
             response.url(),
           ),
         );
+        if (config.debugMode) {
+          logger.log("error", `error: ${await response.allHeaders()}`);
+        }
         page.close();
         return 1;
       }

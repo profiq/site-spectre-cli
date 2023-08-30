@@ -44,4 +44,4 @@ jobs:
           node dist/src/index.js https://www.profiq.com/wp-sitemap-posts-job-1.xml -t 4500
       - name: Run with xml with nested links
         run: |
-          node dist/src/index.js https://movingfast.tech/sitemap.xml -w
+          node dist/src/index.js https://movingfast.tech/sitemap.xml -w -d
