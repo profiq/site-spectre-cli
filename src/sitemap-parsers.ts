@@ -47,6 +47,7 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
         tmpLinks = await _objToArray(parsedSitemapObject);
       } else if (links[i].endsWith(".txt")) {
         tmpLinks = await _txtLinkToArray(links[i]);
+        //aa
       } else {
         logger.log("error", `Invalid sitemap: ${links[i]}\n`);
         continue;
