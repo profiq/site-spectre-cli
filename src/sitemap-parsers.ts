@@ -152,8 +152,10 @@ const linksToArray = async (url: string, sites: string[] = []): Promise<string[]
     links = await _txtLinkToArray(url);
     return links;
   }
-
+  //vymenit objToarray a parseSitemap za extractLinks
+  //try catch do extractLinks
   let parsedSitemapObject = await _parseSitemap(url);
+
 
   logger.log("info", "reading from xml site\n");
   links = await _objToArray(parsedSitemapObject);

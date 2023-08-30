@@ -18,6 +18,12 @@
   },
   "author": "",
   "license": "MIT",
+  "bin": {
+    "sitesp": "./dist/src/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
