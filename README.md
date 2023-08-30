@@ -22,28 +22,30 @@ TODO
 You can modify the CLI config in 2 ways:
 
 ### Command line commands
+
 See available options via --help (-h doesn't work idk why)
 
-If using npm command, need to seperate additional commands using "--" (npm run start -- yourUrl -t 2000 -p 8). *Asi neni potreba psat, ze?*
+If using npm command, need to seperate additional commands using "--" (npm run start -- yourUrl -t 2000 -p 8). _Asi neni potreba psat, ze?_
 
 ### Config file
-Edit the visitConfig.json file with your desired options and use it in the command line (-c visitConfig.json). You don't need to specify all the options if you want to use default options. 
 
-Command line commands will take priority over your config file. However they will **_NOT take priority_** if trying to use default values in command line (e.g. -p 2), in this case the config file would take priority. *(no way to check if option has been called or not, if there is a default value for the option)*
+Edit the visitConfig.json file with your desired options and use it in the command line (-c visitConfig.json). You don't need to specify all the options if you want to use default options.
+
+Command line commands will take priority over your config file. However they will **_NOT take priority_** if trying to use default values in command line (e.g. -p 2), in this case the config file would take priority. _(no way to check if option has been called or not, if there is a default value for the option)_
 
 Additional info regarding options:
 
 #### Page load type
+
 If using the network option you may run into long visits, more info [here](https://playwright.dev/docs/api/class-page#page-wait-for-load-state).
 
 #### Custom headers
+
 TODO
 
 #### Input file
+
 You can list multiple different sitemaps, each on a new line in a txt file.
-
-
-
 
 ## Development
 

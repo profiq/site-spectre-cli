@@ -72,8 +72,6 @@ visitConfigPrint(config);
 const runMain = async () => {
   const linksToVisit = await linksToArray(program.args[0], sitesInput(options.inputFile));
 
-
   await visitSitesWinston(linksToVisit, config);
-
 };
 runMain().then(() => {});
