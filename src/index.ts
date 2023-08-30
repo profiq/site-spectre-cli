@@ -65,8 +65,6 @@ let sites: string[] = [
   // "https://movingfast.tech/post-sitemap.xml"
 ];
 
-//r
-
 visitConfigPrint(config);
 
 const runMain = async () => {
