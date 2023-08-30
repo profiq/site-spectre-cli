@@ -17,6 +17,7 @@ jobs:
     concurrency:
       group: tests-${{ github.ref }}
       cancel-in-progress: true
+      max: 5
 
     steps:
       - name: Checkout Repo
