@@ -81,7 +81,7 @@ const visitSite = async (
           ),
         );
         if (config.debugMode) {
-          logger.log("error", `error: ${await response.allHeaders()}`);
+          logger.log("error", `error: ${await response.statusText()}`);
         }
         page.close();
         return 1;
