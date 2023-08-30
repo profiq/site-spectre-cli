@@ -35,7 +35,6 @@ You don't need to specify all the options if you want to use default options.
 
 Command line commands will take priority over your config file. However they will **_NOT take priority_** if trying to use default values in command line (e.g. -p 2), in this case the config file would take priority. _(no way to check if option has been called or not, if there is a default value for the option)_
 
-
 ### Arguments and options:
 
 #### URL _(argument, no flag)_
@@ -51,6 +50,7 @@ Parallel visit block size. Number of headless browser instances used at once. Do
 Ammount of time in ms browser instance will wait until timing out. Defaults to 5000.
 
 #### Page load type
+
 Either document or network, defaults to document. If using the network option you may run into long visits, more info [here](https://playwright.dev/docs/api/class-page#page-wait-for-load-state).
 
 #### No wait page load _(-l, -no-wait-page-load)_
@@ -74,8 +74,6 @@ Doesn't print successful link visits. _Only prints visit config, found sitemaps,
 #### Input file
 
 You can list multiple different sitemaps, each on a new line in a txt file.
-
-
 
 ## Development
 
