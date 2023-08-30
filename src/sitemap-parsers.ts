@@ -2,6 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import { formatConnectionMessage, newLogger, logger } from "./logger";
 import chalk from "chalk";
 import { log } from "console";
+import { link } from "fs";
 
 let totalNumberOfLinks = 0;
 
@@ -40,8 +41,15 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
   let tmpLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
-    let parsedSitemapObject = await _parseSitemap(links[i]);
-    tmpLinks = await _objToArray(parsedSitemapObject);
+    if (links[i].endsWith(".xml")) {
+      let parsedSitemapObject = await _parseSitemap(links[i]);
+      tmpLinks = await _objToArray(parsedSitemapObject);
+    } else if (links[i].endsWith(".txt")) {
+      tmpLinks = await _txtLinkToArray(links[i]);
+    } else {
+      logger.log("error", `Invalid sitemap: ${links[i]}\n`);
+      continue;
+    }
 
     for (let j = 0; j < tmpLinks.length; j++) {
       expandedLinks.push(tmpLinks[j]);
@@ -50,7 +58,7 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
       "info",
       `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
     );
-    totalNumberOfLinks += tmpLinks.length;
+    //totalNumberOfLinks += tmpLinks.length;
   }
 
   return expandedLinks;
@@ -74,6 +82,7 @@ const _objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
   } else if (parsedSitemapObject.hasOwnProperty("urlset")) {
     for (let i = 0; i < parsedSitemapObject.urlset.url.length; i++) {
       links.push(parsedSitemapObject.urlset.url[i].loc);
+      totalNumberOfLinks++;
     }
     return links;
   } else {
@@ -143,7 +152,8 @@ const linksToArray = async (url: string, sites: string[] = []): Promise<string[]
     links = await _txtLinkToArray(url);
     return links;
   }
-
+  //vymenit objToarray a parseSitemap za extractLinks
+  //try catch do extractLinks
   let parsedSitemapObject = await _parseSitemap(url);
 
   logger.log("info", "reading from xml site\n");

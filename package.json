@@ -8,14 +8,22 @@
     "build": "rm -fr dist && tsc",
     "build:watch": "tsc --watch",
     "start": "node dist/src/index.js",
-    "config": "node dist/src/index.js ada -c visitConfig.json",
-    "startConfig": "node dist/src/index.js https://www.advancedhtml.co.uk/sitemap.txt -c visitConfig.json",
+    "moving": "node dist/src/index.js https://movingfast.tech/post-sitemap.xml",
+    "profiq": "node dist/src/index.js  https://www.profiq.com/wp-sitemap.xml",
+    "sites": "node dist/src/index.js a -f sitesM.txt",
+    "startConfig": "node dist/src/index.js -c visitConfig.json",
     "fix": "prettier --loglever warn --write .",
     "lint:prettier": "prettier --check .",
     "reinstall": "rm -fr node_modules && npm install"
   },
   "author": "",
   "license": "MIT",
+  "bin": {
+    "sitesp": "./dist/src/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^11.0.0",

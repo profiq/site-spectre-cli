@@ -6,7 +6,7 @@
   "customHeaders": {},
   "dryRun": false,
   "debugMode": false,
-  "silentRun": true,
+  "silentRun": false,
   "configFilePath": "visitConfig.json",
   "sitesFilePath": ""
 }
