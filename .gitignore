@@ -272,5 +272,8 @@ fabric.properties
 
 # site input
 sites
+sites.txt
+sitesM
+sitesM.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,webstorm
