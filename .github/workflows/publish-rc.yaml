@@ -1,0 +1,15 @@
+name: Publish RC version to NPM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish-rc-npm:
+    name: "Publish RC version to npm"
+    uses: ./.github/workflows/publish.yaml
+    with:
+      TAG: rc
+      UPDATE_VERSION: true
+    secrets: inherit

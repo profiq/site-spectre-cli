@@ -1,0 +1,15 @@
+name: Publish latest version to NPM
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  publish-rc-npm:
+    name: "Publish latest version to npm"
+    uses: ./.github/workflows/publish.yaml
+    with:
+      TAG: latest
+      UPDATE_VERSION: false
+    secrets: inherit
