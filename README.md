@@ -1,4 +1,9 @@
 # Site Spectre CLI
+![npm](https://img.shields.io/npm/v/site-spectre)
+![npm type definitions](https://img.shields.io/npm/types/site-spectre)
+[![DeepScan grade](https://deepscan.io/api/teams/22045/projects/25384/branches/794017/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=22045&pid=25384&bid=794017)
+[![codecov](https://codecov.io/gh/profiq/site-spectre-cli/graph/badge.svg?token=AIW4AXPQ4R)](https://codecov.io/gh/profiq/site-spectre-cli)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/profiq/site-spectre-cli/publish-rc.yaml)
 
 CLI utility which accepts link to sitemap (xml,txt) of the web, crawls it. And then visits all the links listed with headless browser. Or you can use it to just get the list of all pages in the sitemap.
 
