@@ -52,3 +52,4 @@ jobs:
     with:
       TAG: next
       UPDATE_VERSION: true
+    secrets: inherit
