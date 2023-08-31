@@ -25,6 +25,21 @@
   "files": [
     "dist/"
   ],
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/src/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "types.ts",
+      "index.ts"
+    ]
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,yaml}": [
+      "npx prettier --write"
+    ]
+  },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
@@ -46,20 +61,5 @@
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.0",
     "typescript": "^5.1.6"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "**/src/*.ts"
-    ],
-    "coveragePathIgnorePatterns": [
-      "types.ts",
-      "index.ts"
-    ]
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "npx prettier --write"
-    ]
   }
 }
