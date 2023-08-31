@@ -1,4 +1,4 @@
-name: Tests
+name: Tests and publish to NPM
 
 on:
   pull_request:
@@ -45,3 +45,11 @@ jobs:
       - name: Run with xml with nested links
         run: |
           node dist/src/index.js https://movingfast.tech/sitemap.xml -w
+  publish-npm:
+    name: "Publish next version to npm"
+    needs: test-build-prettier
+    uses: ./.github/workflows/publish.yaml
+    with:
+      TAG: next
+      UPDATE_VERSION: true
+    secrets: inherit
