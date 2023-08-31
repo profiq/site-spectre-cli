@@ -13,3 +13,27 @@ jobs:
       TAG: rc
       UPDATE_VERSION: true
     secrets: inherit
+
+  test-coverage-master:
+    name: "Upload test coverage on master"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: |
+          npm run build
+      - name: Run Jest Test
+        run: |
+          npm run test
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
