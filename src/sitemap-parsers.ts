@@ -64,7 +64,7 @@ const extractLinks = async (links: string[], config?: configType): Promise<strin
       }
       logger.log(
         "info",
-        `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\nNumber of excluded links in sitemap: ${excludedLinks.length}\n`,
+        `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\nNumber of excluded links in sitemap: ${excludedLinks}\n`,
       );
       // totalNumberOfLinks += tmpLinks.length;
     } catch (error) {
