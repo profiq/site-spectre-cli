@@ -65,8 +65,6 @@ let sites: string[] = [
   // "https://www.advancedhtml.co.uk/sitemap.txt"
 ];
 
-// node dist/src/index.js https://movingfast.tech/post-sitemap.xml -e "*/cs*"
-
 visitConfigPrint(config);
 
 const runMain = async () => {
