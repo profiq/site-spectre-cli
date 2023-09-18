@@ -1,4 +1,5 @@
 # Site Spectre CLI
+
 [![npm](https://img.shields.io/npm/v/site-spectre)](https://www.npmjs.com/package/site-spectre)
 [![npm type definitions](https://img.shields.io/npm/types/site-spectre)](https://www.typescriptlang.org/)
 [![DeepScan grade](https://deepscan.io/api/teams/22045/projects/25384/branches/794017/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=22045&pid=25384&bid=794017)
