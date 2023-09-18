@@ -1,5 +1,7 @@
 # Site Spectre CLI
 
+[![Version npm](https://img.shields.io/npm/v/winston.svg?style=flat-square)](https://www.npmjs.com/package/winston)
+
 CLI utility which accepts link to sitemap (xml,txt) of the web, crawls it. And then visits all the links listed with headless browser. Or you can use it to just get the list of all pages in the sitemap.
 
 ### Why?
@@ -19,13 +21,20 @@ TODO
 
 ## Usage
 
+
+
+```
+npm start -- https://www.profiq.com/wp-sitemap.xml -p 4 -l network -e junior tag java -t 6000
+```
+
+
 You can modify the CLI config in 2 ways:
 
 ### Command line commands
 
 See available options via --help (-h doesn't work idk why)
 
-If using npm command, need to seperate additional commands using "--" (npm run start -- yourUrl -t 2000 -p 8). _Asi neni potreba psat, ze?_
+**If using npm command, need to seperate additional commands using "--"** (npm run start **--** yourUrl -t 2000 -p 8).
 
 ### Config file
 
@@ -49,33 +58,54 @@ Parallel visit block size. Number of headless browser instances used at once. Do
 
 Ammount of time in ms browser instance will wait until timing out. Defaults to 5000.
 
-#### Page load type
+#### Page load type _(-l, -page-load-type)_
 
 Either document or network, defaults to document. If using the network option you may run into long visits, more info [here](https://playwright.dev/docs/api/class-page#page-wait-for-load-state).
 
-#### No wait page load _(-l, -no-wait-page-load)_
+#### No wait page load _(-w, -no-wait-page-load)_
 
 Browser will just request the link and will close right after (might not load all site assets). Ignores the page load type mentioned above.
 
-#### Custom headers
+#### Custom headers _(-h, --custom-headers)_
 
-TODO
+Not implemented yet.
 
-#### Dry run
+Intended for you to be able to specify a header your server can check for and disable human visit verification(captcha), also maybe remove visits with this header from website analytics.
+
+#### Debug mode _(-d, --debug)_
+
+Prints additional information.
+
+Skipped links(excluded), html status code meanings
+
+#### Dry run _(-D, --dry)_
 
 Doesn't visit any links, just extracts all the links it would visit and prints those links.
 
-#### Silent run
+#### Silent run _(-s, --silent)_
 
-Doesn't print successful link visits. _Only prints visit config, found sitemaps, errors, summary of all visits._
+Doesn't print successful link visits. _Only prints visit config, found sitemaps, visit errors, summary of all visits._
 
-#### [Config file](#config-file)
+#### [Config file](#config-file) _(-c <configFilename.json>, --config-file <configFilename.json>)_
 
-#### Input file
+#### Input file _(-i <inputFilename.txt>, --input-file <inputFilename.txt>)_
 
-You can list multiple different sitemaps, each on a new line in a txt file.
+You can list multiple different sitemaps to visit, each on a new line in a txt file. Ignores [URL](#url) argument but argument is still needed, just put anything.
+
+#### Exclude tags _(-e <tag tag tag>, --exclude-tags <tag tag tag>)_
+
+
+
+### Output
+
+
 
 ## Development
+
+Use ```npm run build:watch``` while developing to automatically compile any changes made upon saving. (utilizes tsc --watch)
+
+```npm run fix``` to run prettier
+
 
 TODO
 
@@ -83,3 +113,6 @@ TODO
 
 - Chalk is stuck on version 4, because v5 is ESM support only
 - We don't want to use "modules" type. Commonjs rules!.
+
+[npm-url]: https://www.npmjs.com/package/site-spectre
+[npm-image]: https://img.shields.io/npm/v/yargs.svg

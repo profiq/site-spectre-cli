@@ -3,6 +3,7 @@ import { splitLinks } from "./sitemap-parsers";
 import { logger } from "./logger";
 import { configType } from "./types";
 import { OptionValues } from "commander";
+import { option } from "yargs";
 
 //in string format because of commanderJS option format requirement
 const defaultTimeout = "5000";
@@ -41,6 +42,7 @@ const createConfig = (options: any) => {
     silentRun: options.silent,
     configFilePath: options.configFile,
     sitesFilePath: options.inputFile,
+    excludeTags: options.excludeTags,
   };
 
   return config;
@@ -87,6 +89,7 @@ const updateConfig = (config: configType, options: OptionValues, customConfigFil
     ? options.configFile
     : customConfigFile.configFilePath;
   config.sitesFilePath = options.inputFile ? options.inputFile : customConfigFile.sitesFilePath;
+  config.excludeTags = customConfigFile.excludeTags;
 };
 
 const checkConfigFile = (config: any, options: OptionValues) => {

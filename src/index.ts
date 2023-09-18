@@ -49,8 +49,12 @@ program
     "-c, --config-file <filePath>",
     "JSON config file, if you specify any other parameters, they take priority over the config file.",
   )
-  .option("-f, --input-file <filePath>", "Txt file with 1 sitemap link on each line."),
-  program.parse(process.argv);
+  .option("-i, --input-file <filePath>", "Txt file with 1 sitemap link on each line.")
+  .option(
+    "-e, --exclude-tags [tags...]",
+    "If one of these tags is in a link, it wont be visited, seperate with whitespace",
+  );
+program.parse(process.argv);
 
 const options = program.opts();
 
@@ -67,10 +71,11 @@ let sites: string[] = [
   // "https://www.advancedhtml.co.uk/sitemap.txt"
 ];
 
+//logger.log('info', `Excluding links containing one of: ${options.excludeTags}`);
+
 visitConfigPrint(config);
 
 const runMain = async () => {
-  //prejmenovat linksToarary ProcessSitemap
   const linksToVisit = await processSitemap(program.args[0], sitesInput(options.inputFile));
 
   await visitSitesWinston(linksToVisit, config);

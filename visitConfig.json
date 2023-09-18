@@ -8,5 +8,6 @@
   "debugMode": false,
   "silentRun": false,
   "configFilePath": "visitConfig.json",
-  "sitesFilePath": ""
+  "sitesFilePath": "",
+  "excludeTags": ["junior"]
 }

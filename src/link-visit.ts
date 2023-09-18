@@ -28,69 +28,75 @@ const visitSite = async (
 
   try {
     const stime = performance.now();
+    if (config.excludeTags && config.excludeTags.some((element) => link.includes(element))) {
+      if (config.debugMode) {
+        printSite(link, links, "info");
+      }
+      return -1;
+    } else {
+      if (config.customHeaders) {
+        await page.setExtraHTTPHeaders(config.customHeaders);
+      }
+      response = await page.goto(link, { timeout: config.requestTimeout });
 
-    if (config.customHeaders) {
-      await page.setExtraHTTPHeaders(config.customHeaders);
-    }
-    response = await page.goto(link, { timeout: config.requestTimeout });
+      if (config.utilizeWaitForLoadState) {
+        await page.waitForLoadState(
+          waitForLoadStateConfig[config.pageLoadType].waitForLoadState as any,
+          { timeout: config.requestTimeout },
+        );
+      }
 
-    if (config.utilizeWaitForLoadState) {
-      await page.waitForLoadState(
-        waitForLoadStateConfig[config.pageLoadType].waitForLoadState as any,
-        { timeout: config.requestTimeout },
-      );
-    }
+      const ftime = performance.now();
+      const elapsed_time = ftime - stime;
 
-    const ftime = performance.now();
-    const elapsed_time = ftime - stime;
-
-    if (response !== null) {
-      if (
-        response.status() ===
-        200 /* && response.url() !== 'https://www.profiq.com/job/junior-developer/'*/
-      ) {
-        visitCounter++;
-        const localCounter = visitCounter;
-        if (!config.silentRun) {
-          logger.log(
-            "info",
-            chalk.green(
-              formatConnectionMessage(
-                localCounter,
-                links.length,
-                response.status(),
-                elapsed_time,
-                response.url(),
+      if (response !== null) {
+        if (
+          response.status() ===
+          200 /* && response.url() !== 'https://www.profiq.com/job/junior-developer/'*/
+        ) {
+          visitCounter++;
+          const localCounter = visitCounter;
+          if (!config.silentRun) {
+            logger.log(
+              "info",
+              chalk.green(
+                formatConnectionMessage(
+                  localCounter,
+                  links.length,
+                  response.status(),
+                  elapsed_time,
+                  response.url(),
+                ),
               ),
+            );
+          }
+          page.close();
+          return 0;
+        } else {
+          visitCounter++;
+          const localCounter = visitCounter;
+          logger.log(
+            "error",
+            formatConnectionMessage(
+              localCounter,
+              links.length,
+              response.status(),
+              elapsed_time,
+              response.url(),
             ),
           );
+          if (config.debugMode) {
+            logger.log("error", `error: ${await response.statusText()}`);
+          }
+          page.close();
+          return 1;
         }
-        page.close();
-        return 0;
       } else {
         visitCounter++;
-        const localCounter = visitCounter;
-        logger.log(
-          "error",
-          formatConnectionMessage(
-            localCounter,
-            links.length,
-            response.status(),
-            elapsed_time,
-            response.url(),
-          ),
-        );
-        if (config.debugMode) {
-          logger.log("error", `error: ${await response.statusText()}`);
-        }
+        logger.log("error", chalk.red("response is null"));
         page.close();
         return 1;
       }
-    } else {
-      visitCounter++;
-      logger.log("error", chalk.red("response is null"));
-      page.close();
-      return 1;
     }
   } catch (error) {
     visitCounter++;
@@ -100,10 +106,10 @@ const visitSite = async (
   }
 };
 
-const printSite = (link: string, links: string[]) => {
+const printSite = (link: string, links: string[], level: string) => {
   visitCounter++;
   const localCounter = visitCounter;
-  logger.log("info", `${localCounter}/${links.length} - ${link}`);
+  logger.log(level, `${localCounter}/${links.length} - ${link}`);
 };
 
 const visitConfigPrint = (config: configType) => {
@@ -171,6 +177,13 @@ const visitConfigPrint = (config: configType) => {
   if (config.sitesFilePath) {
     logger.log("info", printPrefix(`Using links from file: ${config.sitesFilePath}`));
   }
+  if (config.excludeTags) {
+    //If((tags ∩ link) != ∅')
+    logger.log(
+      "info",
+      printPrefix(`Excluding links containing: ${JSON.stringify(config.excludeTags)}`),
+    );
+  }
   logger.log("info", "***************************\n");
 };
 
@@ -184,6 +197,7 @@ async function visitSitesWinston(links: string[], config: configType) {
 
   let numOfOK = 0;
   let numOfErrors = 0;
+  let numOfSkips = 0;
 
   logger.log("info", `expected total number of links: ${totalNumberOfLinks}\n`);
 
@@ -195,7 +209,7 @@ async function visitSitesWinston(links: string[], config: configType) {
   if (config.dryRun) {
     for (const chunk of chunkedLinks) {
       const promisedVisitSites = chunk.map((link) => {
-        printSite(link, links);
+        printSite(link, links, "info");
       });
       await Promise.all(promisedVisitSites);
     }
@@ -210,6 +224,8 @@ async function visitSitesWinston(links: string[], config: configType) {
       for (const result of results) {
         if (result === 0) {
           numOfOK++;
+        } else if (result === -1) {
+          numOfSkips++;
         } else {
           numOfErrors++;
         }
@@ -221,7 +237,7 @@ async function visitSitesWinston(links: string[], config: configType) {
 
     logger.log(
       "info",
-      `Number of OK visits: ${numOfOK}   \nNumber of failed visits: ${numOfErrors}   \nTime to complete all visits: ${
+      `\nNumber of OK visits: ${numOfOK}   \nNumber of skipped visits: ${numOfSkips}   \nNumber of failed visits: ${numOfErrors}   \nTime to complete all visits: ${
         Math.floor(elapsed_totalTime / 100) / 10
       } s`,
     );

@@ -11,6 +11,7 @@ interface configType {
 
   configFilePath: string; //problem pri tvoreni
   sitesFilePath: string;
+  excludeTags: string[];
 }
 
 export { configType };
