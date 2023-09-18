@@ -1,6 +1,5 @@
-import exp from "constants";
-import { BrowserContext, Page, chromium, devices } from "playwright-chromium";
-import { formatConnectionMessage, newLogger, logger, printPrefix } from "./logger";
+import { BrowserContext, chromium, devices } from "playwright-chromium";
+import { formatConnectionMessage, logger, printPrefix } from "./logger";
 import chalk from "chalk";
 import { totalNumberOfLinks } from "./sitemap-parsers";
 import { configType } from "./types";
@@ -136,6 +135,14 @@ const visitConfigPrint = (config: configType) => {
       "info",
       printPrefix(
         `paralleism: ${config.parallelBlockSize} | Will visit with ${config.parallelBlockSize} requests. Setup using -p.`,
+      ),
+    );
+  }
+  if (config.excludePattern) {
+    logger.log(
+      "info",
+      printPrefix(
+        `exclude: ${config.excludePattern} | Will exclude sites with ${config.excludePattern} regex. Setup using -e.`,
       ),
     );
   }

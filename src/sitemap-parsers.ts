@@ -1,8 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
-import { formatConnectionMessage, newLogger, logger } from "./logger";
-import chalk from "chalk";
-import { log } from "console";
-import { link } from "fs";
+import { logger } from "./logger";
+import { configType } from "./types";
 
 let totalNumberOfLinks = 0;
 
@@ -36,8 +34,9 @@ const _parseSitemap = async (url: string) => {
  * @param links array of sitemap links
  * @returns array of extracted links
  */
-const extractLinks = async (links: string[]): Promise<string[]> => {
+const extractLinks = async (links: string[], config?: configType): Promise<string[]> => {
   let expandedLinks: string[] = [];
+  let excludedLinks: string[] = [];
   let tmpLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
@@ -47,20 +46,27 @@ const extractLinks = async (links: string[]): Promise<string[]> => {
         tmpLinks = await _objToArray(parsedSitemapObject);
       } else if (links[i].endsWith(".txt")) {
         tmpLinks = await _txtLinkToArray(links[i]);
-        //aa
       } else {
         logger.log("error", `Invalid sitemap: ${links[i]}\n`);
         continue;
       }
 
       for (let j = 0; j < tmpLinks.length; j++) {
+        if (config?.excludePattern && config.excludePattern.test(tmpLinks[j])) {
+          if (config.debugMode) {
+            logger.log("info", `Skipping link (excluded): ${tmpLinks[j]}\n`);
+          }
+          excludedLinks.push(tmpLinks[j]);
+          continue;
+        }
         expandedLinks.push(tmpLinks[j]);
+        totalNumberOfLinks++;
       }
       logger.log(
         "info",
-        `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\n`,
+        `Found sitemap: ${links[i]}\nNumber of links in sitemap: ${tmpLinks.length}\nNumber of excluded links in sitemap: ${excludedLinks.length}\n`,
       );
-      //totalNumberOfLinks += tmpLinks.length;
+      // totalNumberOfLinks += tmpLinks.length;
     } catch (error) {
       logger.log("error", `Error extracting links from ${links[i]}, error: ${error}`);
     }
@@ -87,7 +93,7 @@ const _objToArray = async (parsedSitemapObject: any): Promise<string[]> => {
   } else if (parsedSitemapObject.hasOwnProperty("urlset")) {
     for (let i = 0; i < parsedSitemapObject.urlset.url.length; i++) {
       links.push(parsedSitemapObject.urlset.url[i].loc);
-      totalNumberOfLinks++;
+      // totalNumberOfLinks++;
     }
     return links;
   } else {
@@ -125,7 +131,7 @@ const _txtLinkToArray = async (url: string) => {
     tmpArray.forEach((element) => {
       if (element.startsWith("http")) {
         finalArray.push(element);
-        totalNumberOfLinks++;
+        // totalNumberOfLinks++;
       }
     });
 
@@ -144,7 +150,11 @@ const _txtLinkToArray = async (url: string) => {
  * @param sites - array of xml site links we want to visit, optional
  * @returns array of all xml sitemap links we will visit
  */
-const processSitemap = async (url: string, sites: string[] = []): Promise<string[]> => {
+const processSitemap = async (
+  url: string,
+  sites: string[] = [],
+  config?: configType,
+): Promise<string[]> => {
   let links = [];
 
   if (sites.length) {
@@ -163,7 +173,7 @@ const processSitemap = async (url: string, sites: string[] = []): Promise<string
   //try catch do extractLinks
   // let parsedSitemapObject = await _parseSitemap(url);
 
-  return extractLinks([url]);
+  return extractLinks([url], config);
   // links = await _objToArray(parsedSitemapObject);
   // return links;
 };
