@@ -36,7 +36,7 @@ const _parseSitemap = async (url: string) => {
  */
 const extractLinks = async (links: string[], config?: configType): Promise<string[]> => {
   let expandedLinks: string[] = [];
-  let excludedLinks: string[] = [];
+  let excludedLinks = 0;
   let tmpLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
@@ -56,7 +56,7 @@ const extractLinks = async (links: string[], config?: configType): Promise<strin
           if (config.debugMode) {
             logger.log("info", `Skipping link (excluded): ${tmpLinks[j]}\n`);
           }
-          excludedLinks.push(tmpLinks[j]);
+          excludedLinks++;
           continue;
         }
         expandedLinks.push(tmpLinks[j]);
