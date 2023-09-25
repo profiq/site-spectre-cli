@@ -1,25 +1,22 @@
+// @ts-nocheck
 import { _objToArray, _txtLinkToArray, _parseSitemap } from "../src/sitemap-parsers";
-
 import { logger } from "../src/logger";
 
 jest.mock("../src/logger", () => ({
   logger: {
     log: jest.fn(),
-    // whenReady: jest.fn(() => Promise.resolve()),
   },
 }));
 
 describe("txtLinkToArray", () => {
-  describe("Test the positivie scenarios", () => {
+  describe("Test the positive scenarios", () => {
     beforeEach(() => {});
 
     afterEach(() => {
-      //@ts-ignore
       global.fetch.mockClear();
     });
 
     it("tests correct txt sitemap input", async () => {
-      //@ts-ignore
       global.fetch = jest.fn(() =>
         Promise.resolve({
           text: () =>
@@ -29,8 +26,7 @@ describe("txtLinkToArray", () => {
         }),
       );
 
-      //console.log(await _txtLinkToArray("whateverurl"));
-      const array = await _txtLinkToArray("");
+      const array = await _txtLinkToArray("example.com");
       // TODO: "write a expect that it returns correctly the things"
 
       expect(array).toStrictEqual([
@@ -38,25 +34,28 @@ describe("txtLinkToArray", () => {
         "https://coh3stats.com/about",
         "https://coh3stats.com/leaderboards?race=american&type=1v1",
       ]);
-      //expect(global.fetch).toHaveBeenCalledWith("whateverurl");
+      // @ts-ignore
+      expect(global.fetch).toHaveBeenCalledWith("example.com");
     });
   });
 
   describe("Test the negative scenarios", () => {
     beforeEach(() => {});
 
+    afterEach(() => {
+      global.fetch.mockClear();
+    });
+
     it("tests rejected url response", async () => {
-      //@ts-ignore
       global.fetch = jest.fn(() =>
         Promise.resolve({
           text: () => Promise.reject("test"),
         }),
       );
 
-      const result = await _txtLinkToArray("whateverurl");
+      const result = await _txtLinkToArray("example.com");
       expect(result.length).toBe(0);
 
-      //expect(logger.log).toBeCalledTimes(1)
       expect(logger.log).toBeCalledWith(
         "error",
         "Error reading links from .txt sitemap, error: test",
@@ -64,26 +63,18 @@ describe("txtLinkToArray", () => {
     });
 
     it("tests invalid url", async () => {
-      //@ts-ignore
       global.fetch = jest.fn(() =>
         Promise.resolve({
           text: () => Promise.reject("fetch failed"),
         }),
       );
 
-      const result = await _txtLinkToArray("");
+      await _txtLinkToArray("");
 
       expect(logger.log).toBeCalledWith(
         "error",
         "Error reading links from .txt sitemap, error: fetch failed",
       );
-    });
-
-    //failed http
-
-    afterEach(() => {
-      //@ts-ignore
-      global.fetch.mockClear();
     });
   });
 });
@@ -91,17 +82,14 @@ describe("txtLinkToArray", () => {
 describe("objToArray", () => {
   describe("Test the positivie scenarios", () => {
     beforeEach(() => {
-      //@ts-ignore
       global.fetch.mockClear();
     });
 
     afterEach(() => {
-      //@ts-ignore
       global.fetch.mockClear();
     });
 
     it("tests correct xml sitemap with nested xml sitemaps input", async () => {
-      //@ts-ignore
       global.fetch = jest.fn((url: string) => {
         switch (url) {
           case "https://www.profiq.com/wp-sitemap.xml": {
@@ -139,7 +127,6 @@ describe("objToArray", () => {
         }
       });
 
-      //console.log(await _txtLinkToArray("whateverurl"));
       const parsedSitemapObject = await _parseSitemap("https://www.profiq.com/wp-sitemap.xml");
       const array = await _objToArray(parsedSitemapObject);
       // TODO: "write a expect that it returns correctly the things"
@@ -289,7 +276,6 @@ describe("objToArray", () => {
     });
 
     it("tests correct xml sitemap with final links inside", async () => {
-      //@ts-ignore
       global.fetch = jest.fn(() =>
         Promise.resolve({
           text: () =>
@@ -314,7 +300,6 @@ describe("objToArray", () => {
 
   describe("Test the negative scenarios", () => {
     it("tests invalid sitemap format", async () => {
-      //@ts-ignore
       global.fetch = jest.fn(() =>
         Promise.resolve({
           text: () =>
@@ -336,7 +321,7 @@ describe("objToArray", () => {
 /*
 describe("parseSiteMap"){
 
-          //@ts-ignore
+
           global.fetch = jest.fn((url:string) =>{
             switch(url){
               case "https://www.profiq.com/wp-sitemap.xml": {
