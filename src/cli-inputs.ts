@@ -36,6 +36,7 @@ const createConfig = (options: any) => {
     // custom headesr --> array
     parallelBlockSize: Number(options.parallel),
     customHeaders: {},
+    excludePattern: options.exclude,
     dryRun: options.dry,
     debugMode: options.debug,
     silentRun: options.silent,
@@ -54,7 +55,7 @@ const pasteConfigFile = (config: configType, customConfigFile: any) => {
   // custom headesr --> array
   config.parallelBlockSize = Number(customConfigFile.parallelBlockSize);
   config.customHeaders = {};
-  config.dryRun = customConfigFile.dryRun;
+  (config.excludePattern = customConfigFile.exclude), (config.dryRun = customConfigFile.dryRun);
   config.debugMode = customConfigFile.debugMode;
   config.silentRun = customConfigFile.silentRun;
   config.configFilePath = customConfigFile.configFilePath;
@@ -80,7 +81,8 @@ const updateConfig = (config: configType, options: OptionValues, customConfigFil
     config.pageLoadType = "network";
   }
 
-  config.dryRun = options.dry ? true : customConfigFile.dryRun;
+  (config.excludePattern = options.exclude ? true : customConfigFile.exclude),
+    (config.dryRun = options.dry ? true : customConfigFile.dryRun);
   config.debugMode = options.debug ? true : customConfigFile.debugMode;
   config.silentRun = options.silent ? true : customConfigFile.silentRun;
   config.configFilePath = options.configFile
@@ -105,4 +107,11 @@ const checkConfigFile = (config: any, options: OptionValues) => {
   }
 };
 
-export { sitesInput, createConfig, checkConfigFile, defaultParallel, defaultTimeout };
+export {
+  sitesInput,
+  createConfig,
+  pasteConfigFile,
+  checkConfigFile,
+  defaultParallel,
+  defaultTimeout,
+};

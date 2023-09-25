@@ -1,6 +1,5 @@
-import exp from "constants";
-import { BrowserContext, Page, chromium, devices } from "playwright-chromium";
-import { formatConnectionMessage, newLogger, logger, printPrefix } from "./logger";
+import { BrowserContext, chromium, devices } from "playwright-chromium";
+import { formatConnectionMessage, logger, printPrefix } from "./logger";
 import chalk from "chalk";
 import { totalNumberOfLinks } from "./sitemap-parsers";
 import { configType } from "./types";
@@ -139,6 +138,14 @@ const visitConfigPrint = (config: configType) => {
       ),
     );
   }
+  if (config.excludePattern) {
+    logger.log(
+      "info",
+      printPrefix(
+        `exclude: ${config.excludePattern} | Will exclude sites with ${config.excludePattern} regex. Setup using -e.`,
+      ),
+    );
+  }
   logger.log(
     "info",
     printPrefix(
@@ -182,7 +189,7 @@ async function visitSitesWinston(links: string[], config: configType) {
   let numOfOK = 0;
   let numOfErrors = 0;
 
-  logger.log("info", `expected total number of links: ${totalNumberOfLinks}\n`);
+  logger.log("info", `\nExpected total number of links: ${totalNumberOfLinks}\n`);
 
   const sTotalTime = performance.now();
 

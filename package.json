@@ -17,6 +17,20 @@
     "reinstall": "rm -fr node_modules && npm install",
     "prepare": "husky install"
   },
+  "engines": {
+    "node": ">18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/profiq/site-spectre-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "tool",
+    "console",
+    "terminal",
+    "command"
+  ],
   "author": "profiq",
   "license": "MIT",
   "bin": {

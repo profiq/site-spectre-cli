@@ -1,5 +1,4 @@
 import { createLogger, format, transports } from "winston";
-import chalk from "chalk";
 
 const newLogger = () => {
   //@ts-ignore
