@@ -189,7 +189,7 @@ async function visitSitesWinston(links: string[], config: configType) {
   let numOfOK = 0;
   let numOfErrors = 0;
 
-  logger.log("info", `expected total number of links: ${totalNumberOfLinks}\n`);
+  logger.log("info", `\nExpected total number of links: ${totalNumberOfLinks}\n`);
 
   const sTotalTime = performance.now();
 
