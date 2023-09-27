@@ -63,7 +63,6 @@ const pasteConfigFile = (config: configType, customConfigFile: any) => {
 };
 
 const updateConfig = (config: configType, options: OptionValues, customConfigFile: any) => {
-  //pageLoad
   if (options.requestTimeout !== defaultTimeout) {
     config.requestTimeout = options.requestTimeout;
   } else {
